@@ -7,11 +7,16 @@ const routes = express.Router();
 
 //Importando controllers
 const authController = require('./controllers/authController');
+const jobController = require('./controllers/jobController');
 const rateController = require('./controllers/rateController');
 
 //Rotas da API
 routes.post('/auth/register', authController.register );
 routes.post('/authenticate', authController.authenticate );
+
+routes.post('/job/store', authMiddleware, jobController.store);
+routes.delete('/job/remove/:jobId', authMiddleware, jobController.destroy);
+
 routes.get('/rate', authMiddleware, rateController.index);
 //routes.post('/products', ProductController.store );
 //routes.get('/products/:id', ProductController.show );
