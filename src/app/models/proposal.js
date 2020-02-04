@@ -20,6 +20,10 @@ const ProposalSchema = new mongoose.Schema({
         ref: 'User',
         required: true,
     },
+    messages: [{ //Lista de mensagens trocadas nesta proposta.
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'TextMessage',
+    }],
     createdAt:{
         type: Date,
         default: Date.now,

@@ -46,10 +46,7 @@ const JobSchema = new mongoose.Schema({
     /*jobProposal: [{//Lista de propostas vinculadas ao job, feitas por prestadores.
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Proposal',
-    }],
-    /*messages:{ //Lista de mensagens trocadas neste job.
-
-    },*/
+    }],*/
     jobComplete: {
         type: Boolean,
         required: true,

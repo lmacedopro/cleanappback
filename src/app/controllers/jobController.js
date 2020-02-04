@@ -14,6 +14,32 @@ module.exports = {
         res.send({ ok: true, user: req.userId });
     },
 
+    async list(req, res){
+
+        try{
+            //filtra todos os jobs pelo usuário que publicou
+            const jobs = await Job.find({publisher: req.userId}).populate('publisher');
+
+            return res.send({ jobs });
+
+        }catch(err){
+            return res.status(400).send({error: "Cannot List jobs!"});
+        }
+    },
+
+    async show(req, res){
+
+        try{
+
+            const job = await Job.findById(req.params.jobId).find({publisher: req.userId}).populate('publisher');
+
+            return res.send({ job });
+
+        }catch(err){
+            return res.status(400).send({error: "Cannot List job!"});
+        }
+    },
+
     async store(req, res){
 
         try{
@@ -22,22 +48,23 @@ module.exports = {
             return res.send(job);
 
         }catch(err){
-            return res.status(400).send({err});
+            return res.status(400).send({error: "Cannot create the job!"});
         }
     },
 
     async destroy(req, res){
 
-        //verificar se o usuario autenticado é o mesmo que está excluindo
-        //verificar se a data de criação do registro é menor que os 15 minutos posteriores;
-        await Job.findByIdAndRemove(req.params.id);
+        try{
 
-        return res.send();
-    },
+            await Job.findByIdAndRemove(req.params.jobId);
+            return res.send();
 
-    async show(req, res){
-        const job = await Job.findById(req.params.id);
+        }catch(err){
 
-        return res.json(job);
+            return res.status(400).send({error: "Cannot delete the job!"});
+        }
+        
+
+        
     },
 };

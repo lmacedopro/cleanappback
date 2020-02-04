@@ -14,6 +14,8 @@ const rateController = require('./controllers/rateController');
 routes.post('/auth/register', authController.register );
 routes.post('/authenticate', authController.authenticate );
 
+routes.get('/job/list', authMiddleware, jobController.list);
+routes.get('/job/show/:jobId', authMiddleware, jobController.show);
 routes.post('/job/store', authMiddleware, jobController.store);
 routes.delete('/job/remove/:jobId', authMiddleware, jobController.destroy);
 
