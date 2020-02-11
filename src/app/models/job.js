@@ -17,11 +17,6 @@ const JobSchema = new mongoose.Schema({
         required: true,
 
     },
-    jobPaidPrice:{ //Preço efetivamente pago pelo usuario que publica o job
-        type: String,
-        required: true,
-        default: "0",
-    },
     /*jobLocation: {
         type: {
             type: String, 
@@ -43,10 +38,10 @@ const JobSchema = new mongoose.Schema({
         required: true,
         default: 'Publicado',
     },
-    /*jobProposal: [{//Lista de propostas vinculadas ao job, feitas por prestadores.
+    jobProposal: [{//Lista de propostas vinculadas ao job, feitas por prestadores.
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Proposal',
-    }],*/
+    }],
     jobComplete: {
         type: Boolean,
         required: true,

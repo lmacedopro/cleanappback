@@ -1,4 +1,6 @@
 const Proposal = require('../models/proposal');
+const Job = require('../models/job');
+const User = require('../models/user');
 
 module.exports = {
     
@@ -14,17 +16,26 @@ module.exports = {
         res.send({ ok: true, user: req.userId });
     },
 
-   /* async store(req, res){
+    async store(req, res){
 
         try{
-            const proposal = await Proposal.create({...req.body, : req.id});
 
-            return res.send(job);
+            //procurao job pelo id e adiciona o id a porposta
+            const findjob = await Job.findOne({_id: req.body.job});
+
+            //insere a proposta no banco
+            const proposal = await Proposal.create({...req.body, provider: req.userId, job: findjob.id});
+
+            //vincula a proposta ao job
+            await Job.findByIdAndUpdate(findjob.id, { $push: {jobProposal: proposal } }, {new: true});
+
+            return res.send(proposal);
 
         }catch(err){
-            return res.status(400).send({err});
+            
+            return res.status(400).send({error: 'Cannot store proposal!'});
         }
-    },*/
+    },
 
     async destroy(req, res){
 
@@ -36,8 +47,14 @@ module.exports = {
     },
 
     async show(req, res){
-        /*const job = await Job.findById(req.params.id);
+        try{
 
-        return res.json(job);*/
+            const proposal = await Proposal.findById(req.params.propId).populate(['job','provider']);
+
+            return res.send({ proposal });
+
+        }catch(err){
+            return res.status(400).send({error: "Cannot List proposal!"});
+        }
     },
 };

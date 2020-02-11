@@ -14,11 +14,10 @@ module.exports = {
         res.send({ ok: true, user: req.userId });
     },
 
-    async list(req, res){
+    async listmyjobs(req, res){ //Lista os jobs publicados pelo usuario
 
         try{
-            //filtra todos os jobs pelo usuário que publicou
-            const jobs = await Job.find({publisher: req.userId}).populate('publisher');
+            const jobs = await Job.find({publisher: req.userId}).populate(['publisher','jobProposal']);
 
             return res.send({ jobs });
 
@@ -27,11 +26,24 @@ module.exports = {
         }
     },
 
+    async list(req, res){ //Lista todos jobs publicados por outros usuarios 
+
+        try{
+
+            const jobs = await Job.find({publisher: { $ne: req.userId} }).populate(['publisher','jobProposal']);
+
+            return res.send({ jobs });
+        }catch(err){
+
+            return res.status(400).send({error: "Cannot List jobs!"});
+        }
+    },
+
     async show(req, res){
 
         try{
 
-            const job = await Job.findById(req.params.jobId).find({publisher: req.userId}).populate('publisher');
+            const job = await Job.findById(req.params.jobId).populate(['publisher','jobProposal']);
 
             return res.send({ job });
 

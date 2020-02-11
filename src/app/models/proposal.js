@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const ProposalSchema = new mongoose.Schema({
 
-    description: {
+    comment: {
         type: String,
         required: true,
     },
@@ -20,10 +20,11 @@ const ProposalSchema = new mongoose.Schema({
         ref: 'User',
         required: true,
     },
-    messages: [{ //Lista de mensagens trocadas nesta proposta.
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'TextMessage',
-    }],
+    selected:{ //para o publisher selecionar a melhor proposta
+        type: Boolean,
+        required: true,
+        default: false,
+    },
     createdAt:{
         type: Date,
         default: Date.now,
