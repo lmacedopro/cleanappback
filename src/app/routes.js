@@ -23,6 +23,7 @@ routes.delete('/job/remove/:jobId', authMiddleware, jobController.destroy);
 
 routes.get('/proposal/show/:propId', authMiddleware, proposalController.show);
 routes.post('/proposal/store', authMiddleware, proposalController.store);
+routes.delete('/proposal/remove/:propId', authMiddleware, proposalController.destroy);
 
 routes.get('/rate', authMiddleware, rateController.index);
 //routes.post('/products', ProductController.store );

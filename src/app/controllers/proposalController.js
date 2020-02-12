@@ -21,7 +21,7 @@ module.exports = {
         try{
 
             //procurao job pelo id e adiciona o id a porposta
-            const findjob = await Job.findOne({_id: req.body.job});
+            const findjob = await Job.findById(req.body.job);
 
             //insere a proposta no banco
             const proposal = await Proposal.create({...req.body, provider: req.userId, job: findjob.id});
@@ -39,14 +39,23 @@ module.exports = {
 
     async destroy(req, res){
 
-        //verificar se o usuario autenticado é o mesmo que está excluindo
-        //verificar se a data de criação do registro é menor que os 15 minutos posteriores;
-        /*await Job.findByIdAndRemove(req.params.id);
+        try{
 
-        return res.send();*/
+            const proposal = await Proposal.findById(req.params.propId).populate(['provider','job']);
+
+            if(req.userId !== proposal.provider.id)
+                return res.status(400).send({error: "The User must be same the Proposal provider to delete the Proposal!"});
+            
+            await Proposal.findByIdAndRemove(req.params.propId); 
+            return res.send();
+
+        }catch(err){
+
+            return res.status(400).send({error: "Cannot delete the job!"});
+        }
     },
 
-    async show(req, res){
+    async show(req, res){ //exibe os detalhes de uma proposta
         try{
 
             const proposal = await Proposal.findById(req.params.propId).populate(['job','provider']);

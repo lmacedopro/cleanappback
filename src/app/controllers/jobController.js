@@ -68,7 +68,16 @@ module.exports = {
 
         try{
 
+            const job = await Job.findById(req.params.jobId).populate('publisher');
+            const publisher = job.publisher.id;
+            const user = req.userId;
+
+            if(user !== publisher)
+                return res.status(400).send({error: "The User must be same the Job publisher to delete the Job!"});
+            
+            
             await Job.findByIdAndRemove(req.params.jobId);
+            //console.log({publisher, user});
             return res.send();
 
         }catch(err){
